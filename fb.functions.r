@@ -22,8 +22,8 @@ categories = c(
 	"WOOLWORTHS"
 	)
 	
-x <- categorise("Bankwest.csv", categories)
-report(x, categories)
+#x <- categorise("Bankwest.csv", categories)
+#report(x, categories)
 
 
 

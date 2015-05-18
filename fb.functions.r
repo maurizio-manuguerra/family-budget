@@ -50,12 +50,12 @@ categorise <- function(filein, categories){
 	for (cat_name in categories){
 		cat_content = read.csv(paste("Categories/",cat_name,".csv",sep=''),header=F)[,1]
 #		sapply(cat_content, categ, kindstr=cat_name)
-        ii <- grep(cat_content, x$description, ignore.case=TRUE)
-        x$kind[ii]=cat_name
-#		for (icat in cat_content){
-#            ii=grep(icat,x$description,ignore.case=TRUE)
-#            x$kind[ii]=cat_name
-#        }
+#        ii <- grep(cat_content, x$description, ignore.case=TRUE)
+#        x$kind[ii]=cat_name
+		for (icat in cat_content){
+            ii=grep(icat,x$description,ignore.case=TRUE)
+            x$kind[ii]=cat_name
+        }
 	}
 	return(x)
 }

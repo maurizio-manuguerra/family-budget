@@ -1,0 +1,2 @@
+This package purpose is to help in understanding and managing the family budget.
+The main function takes a csv file with three columns (date, description, amount - choose whatever names you want) and categorizes each record based on the files - a list of categories - in the folder "categories".

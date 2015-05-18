@@ -1,14 +1,3 @@
-setwd('~/Dropbox/Archive/Life/Spese/')
-#x=read.csv('Workbook2jan.csv')
-x1=read.csv('Bankwest.csv')
-names(x1)=c('date','description','amount')
-x2=read.csv('AFG.csv')
-names(x2)=c('date','description','amount')
-x=rbind(x1,x2)
-x$kind=rep('?',nrow(x))
-x$date <- as.Date(x$date,format="%d/%m/%y")
-x <- x[order(x$date),]
-
 categories = c(
 	"Alcohol",
 	"Bills",
@@ -33,7 +22,7 @@ categories = c(
 	"WOOLWORTHS"
 	)
 	
-x <- categorise(x, categories)
+x <- categorise("Bankwest.csv", categories)
 report(x, categories)
 
 
@@ -51,15 +40,22 @@ show_category <- function(x, category){
 }
 
 
-categorise <- function(x, categories){
-	categ <- function(substr, kindstr){
-		ii=grep(substr,x$description,ignore.case=TRUE)
-		x$kind[ii]=kindstr
-		x<<-x
-	}
+categorise <- function(filein, categories){
+    x <- read.csv(filein)
+    names(x) <- c("date", "description", "amount")
+    x$kind=rep('?',nrow(x))
+    x$date <- as.Date(x$date,format="%d/%m/%y")
+    x <- x[order(x$date),]
+	#FIXME check existence of folder Categories and create if not there
 	for (cat_name in categories){
 		cat_content = read.csv(paste("Categories/",cat_name,".csv",sep=''),header=F)[,1]
-		sapply(cat_content,categ,kindstr=cat_name)
+#		sapply(cat_content, categ, kindstr=cat_name)
+        ii <- grep(cat_content, x$description, ignore.case=TRUE)
+        x$kind[ii]=cat_name
+#		for (icat in cat_content){
+#            ii=grep(icat,x$description,ignore.case=TRUE)
+#            x$kind[ii]=cat_name
+#        }
 	}
 	return(x)
 }
@@ -75,11 +71,15 @@ report <- function(x,categories){
 	}
 	ii=which(x$kind=="?")
 	print(paste("?:",sum(x$amount[ii])))
-	total=total+sum(x$amount[ii])
-		
+	total=total+sum(x$amount[ii])	
 	print(paste("Total=",total))
 }
 
+categ <- function(x, substr, kindstr){
+	ii=grep(substr,x$description,ignore.case=TRUE)
+	x$kind[ii]=kindstr
+	x
+}
 
 show_unknowns <- function(x){
 	ii=which(x$kind=="?")

@@ -40,13 +40,24 @@ show_category <- function(x, category){
 }
 
 
-categorise <- function(filein, categories){
+categorise <- function(filein){
     x <- read.csv(filein)
     names(x) <- c("date", "description", "amount")
     x$kind=rep('?',nrow(x))
     x$date <- as.Date(x$date,format="%d/%m/%y")
     x <- x[order(x$date),]
 	#FIXME check existence of folder Categories and create if not there
+	if ("./Categories" %in% list.dirs(recursive=F)){
+	    #list csv files
+	    files = list.files("./Categories", pattern="*.csv")
+        if (length(files) > 0){
+            categories <- as.character(sapply(files, function(x)substr(x,1,nchar(x)-4) ))
+        } else {
+            #advise to run new_categories() to create list of categories.
+        }
+	} else {
+	    #create Categories folder and advise to run new_categories() to create list of categories.
+	}
 	for (cat_name in categories){
 		cat_content = read.csv(paste("Categories/",cat_name,".csv",sep=''),header=F)[,1]
 		for (icat in cat_content){
@@ -72,11 +83,6 @@ report <- function(x,categories){
 	print(paste("Total=",total))
 }
 
-categ <- function(x, substr, kindstr){
-	ii=grep(substr,x$description,ignore.case=TRUE)
-	x$kind[ii]=kindstr
-	x
-}
 
 show_unknowns <- function(x){
 	ii=which(x$kind=="?")

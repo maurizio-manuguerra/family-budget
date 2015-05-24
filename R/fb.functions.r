@@ -1,33 +1,13 @@
-categories = c(
-	"Alcohol",
-	"Bills",
-	"CafeRestaurant",
-	"Car",
-	"Cash",
-	"ChildCare",
-	"Credit Card",
-	"Food",
-	"Health",
-	"Holidays",
-	"Lavori",
-	"Life",
-	"Mortgage",
-	"PayPal",
-	"Phone",
-	"Rent",
-	"Salary",
-	"School",
-	"Taxes",
-	"To refund",
-	"WOOLWORTHS"
-	)
-	
-#x <- categorise("Bankwest.csv", categories)
-#report(x, categories)
+test <- function(){
+    #categories = c("Alcohol","Bills","CafeRestaurant","Car","Cash","ChildCare","Credit Card","Food","Health","Holidays","Lavori","Life","Mortgage","PayPal","Phone","Rent","Salary","School","Taxes","To refund","WOOLWORTHS")
+    x <- categorise("Bankwest.csv")
+    report(x)
+}
 
 
 
-show_category <- function(x, category){
+show_category <- function(object, category){
+    x <- object$expenses
 	ii=which(x$kind==category)
 	if (length(ii)>0) {
 		print(x[ii,])
@@ -54,12 +34,14 @@ categorise <- function(filein){
             categories <- as.character(sapply(files, function(x)substr(x,1,nchar(x)-4) ))
         } else {
             cat("The folder 'Categories' is empty. You should run new_categories() to create the categories files and their content.")
+            return()
             #advise to run new_categories() to create list of categories.
         }
 	} else {
 	    #create Categories folder and advise to run new_categories() to create list of categories.
 	        dir.create("Categories")
 	        cat("The folder 'Categories' is not present and it has been created for you. You should now run new_categories() to create the categories files and their content.")
+	        return()
 	}
 	for (cat_name in categories){
 		cat_content = read.csv(paste("Categories/",cat_name,".csv",sep=''),header=F)[,1]
@@ -68,10 +50,12 @@ categorise <- function(filein){
             x$kind[ii]=cat_name
         }
 	}
-	return(x)
+	return(list(expenses=x, categories=categories, file=filein))
 }
 
-report <- function(x,categories){
+report <- function(object){
+    x <- object$expenses
+    categories <- object$categories
 	total=0
 	print(paste("Period ",min(x$date)," - ",max(x$date),sep=''))
 	print("---------------------------------------------------")
@@ -87,7 +71,8 @@ report <- function(x,categories){
 }
 
 
-show_unknowns <- function(x){
+show_unknowns <- function(object){
+    x <- object$expenses
 	ii=which(x$kind=="?")
 	if (length(ii)>0) {
 		print(x[ii,])
@@ -102,29 +87,33 @@ new_categories <- function(){
 }
 
 
-fix_unknowns <- function(x, categories){
-	next_index <- i <- which(x$kind == "?")[1]
-	if (length(next_index) == 0) return(x)
-	len_c <- length(categories)
-	cat("\n\n\n")
-	print(x[i,])
-	cat("\n", paste(1:len_c,categories,"\n"))
-	input <- readline(paste("Please choose category [1-",len_c,", s to skip, q to quit]: ",sep=''))
-	if (input == "q"){
-		cat("\nQuitting...")
-		return(x)
-	} else if (input == "s"){
-		cat("\nSkipping...")
-		x[i,]$kind <- '??'
-		x = add_item_to_category(x, categories)
-	} else {
-		#x[i,]$kind <- categories[as.numeric(input)]
-		write.table(x[i,2],file=paste('Categories/',categories[as.numeric(input)],'.csv',sep=''),row.names=F,append=T,col.names=F)
-		x = categorise(x, categories)
-		x = add_item_to_category(x, categories)
+fix_unknowns <- function(object){
+    x <- object$expenses
+    categories <- object$categories
+    filein <- object$file
+	unknowns <- which(x$kind == "?")
+	if (length(unknowns) == 0) {
+	    cat("No unknown records found.")
+	    return(object)
 	}
-	indices <- which(x$kind=="??")
-	if (length(indices)>0) x[indices,]$kind = "?"
-	return(x)
+	len_c <- length(categories)
+	for (i in unknowns){
+    	cat("\n\n\n")
+    	print(x[i,])
+    	cat("\n", paste(1:len_c,categories,"\n"))
+    	input <- readline(paste("Please choose category [1-",len_c,", s to skip, q to quit]: ",sep=''))
+    	if (input == "q"){
+    		cat("\nQuitting...")
+    		return(object)
+    	} else if (input == "s"){
+    		cat("\nSkipping...")
+    		break()
+    	} else {
+        	cat_name <- categories[as.numeric(input)]
+    		write.table(x[i,2],file=paste('Categories/',cat_name,'.csv',sep=''),row.names=F,append=T,col.names=F)
+    		x[i, "kind"] <- cat_name
+    	}
+    }
+	return(list(expenses=x, categories=categories, file=filein))
 }
 

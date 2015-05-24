@@ -1,6 +1,6 @@
 test <- function(){
     #categories = c("Alcohol","Bills","CafeRestaurant","Car","Cash","ChildCare","Credit Card","Food","Health","Holidays","Lavori","Life","Mortgage","PayPal","Phone","Rent","Salary","School","Taxes","To refund","WOOLWORTHS")
-    x <- categorise("Bankwest.csv")
+    x <- categorise("AFG.csv")
     report(x)
 }
 

@@ -53,10 +53,13 @@ categorise <- function(filein){
         if (length(files) > 0){
             categories <- as.character(sapply(files, function(x)substr(x,1,nchar(x)-4) ))
         } else {
+            cat("The folder 'Categories' is empty. You should run new_categories() to create the categories files and their content.")
             #advise to run new_categories() to create list of categories.
         }
 	} else {
 	    #create Categories folder and advise to run new_categories() to create list of categories.
+	        dir.create("Categories")
+	        cat("The folder 'Categories' is not present and it has been created for you. You should now run new_categories() to create the categories files and their content.")
 	}
 	for (cat_name in categories){
 		cat_content = read.csv(paste("Categories/",cat_name,".csv",sep=''),header=F)[,1]
@@ -93,6 +96,11 @@ show_unknowns <- function(x){
 	}
 	
 }
+
+new_categories <- function(){
+    cat("Function not yet implemented!")
+}
+
 
 fix_unknowns <- function(x, categories){
 	next_index <- i <- which(x$kind == "?")[1]

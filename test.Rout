@@ -1,0 +1,75 @@
+
+R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> document(); install(); test()
+Updating familybudget documentation
+Loading familybudget
+First time using roxygen2 4.0. Upgrading automatically...
+Installing familybudget
+'/Library/Frameworks/R.framework/Resources/bin/R' --vanilla CMD INSTALL  \
+  '/Users/manuguerra/Documents/git/family-budget'  \
+  --library='/Library/Frameworks/R.framework/Versions/3.1/Resources/library'  \
+  --install-tests 
+
+* installing *source* package 'familybudget' ...
+** R
+** preparing package for lazy loading
+** help
+No man pages found in package  'familybudget' 
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+* DONE (familybudget)
+Reloading installed familybudget
+
+Attaching package: 'familybudget'
+
+The following object is masked from 'package:devtools':
+
+    test
+
+[1] "Period 2014-09-15 - 2015-05-15"
+[1] "---------------------------------------------------"
+[1] "Alcohol : -2133.26"
+[1] "Bills : 0"
+[1] "CafeRestaurant : -5332.81"
+[1] "Car : -6762.15"
+[1] "Cash : 0"
+[1] "ChildCare : -1582.75"
+[1] "Credit Card : 54288.65"
+[1] "Food : -980.39"
+[1] "Health : -909.83"
+[1] "Holidays : -14261.81"
+[1] "Lavori : -1714.73"
+[1] "Life : -7515.41"
+[1] "Mortgage : 0"
+[1] "PayPal : -203.98"
+[1] "Phone : -235.08"
+[1] "Rent : 0"
+[1] "Salary : -127.88"
+[1] "School : -423"
+[1] "Taxes : -568.91"
+[1] "To refund : -1327.36"
+[1] "WOOLWORTHS : -10552.58"
+[1] "?: 0"
+[1] "Total= -343.279999999997"
+> 
+> proc.time()
+   user  system elapsed 
+  1.237   0.138   1.408 

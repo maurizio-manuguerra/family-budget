@@ -19,6 +19,33 @@ show_category <- function(object, category){
 	
 }
 
+new_category <- function(cat){
+    output <- dir.create(cat)
+    if (output) {
+        cat("Category created. You can now add items running fix_unknowns(object)")
+    } else {
+        cat("Something wrong happened")
+    }
+}
+
+del_category <- function(cat){
+    output <- system(paste("rm -fr ", cat))
+    if (output) {
+        cat("Category deleted. Remember to re-run categorise(object)\n")
+    } else {
+        cat("Something wrong happened")
+    }
+}
+
+rename_category <- function(cat_old, cat_new){
+    output <- system(paste("mv", cat_old, cat_new, sep=" "))
+    if (output) {
+        cat("Category renamed. Remember to re-run categorise(object)\n")
+    } else {
+        cat("Something wrong happened")
+    }
+    
+
 
 categorise <- function(filein){
     x <- read.csv(filein)
@@ -33,14 +60,14 @@ categorise <- function(filein){
         if (length(files) > 0){
             categories <- as.character(sapply(files, function(x)substr(x,1,nchar(x)-4) ))
         } else {
-            cat("The folder 'Categories' is empty. You should run new_categories() to create the categories files and their content.")
+            cat("The folder 'Categories' is empty. You should run new_category() to create the categories files and their content.\n")
             return()
-            #advise to run new_categories() to create list of categories.
+            #advise to run new_category() to create list of categories.
         }
 	} else {
-	    #create Categories folder and advise to run new_categories() to create list of categories.
+	    #create Categories folder and advise to run new_category() to create list of categories.
 	        dir.create("Categories")
-	        cat("The folder 'Categories' is not present and it has been created for you. You should now run new_categories() to create the categories files and their content.")
+	        cat("The folder 'Categories' is not present and it has been created for you. You should now run new_category() to create the categories files and their content.")
 	        return()
 	}
 	for (cat_name in categories){
@@ -80,10 +107,6 @@ show_unknowns <- function(object){
 		print("No unknowns!")
 	}
 	
-}
-
-new_categories <- function(){
-    cat("Function not yet implemented!")
 }
 
 

@@ -1,7 +1,9 @@
 test <- function(){
     #categories = c("Alcohol","Bills","CafeRestaurant","Car","Cash","ChildCare","Credit Card","Food","Health","Holidays","Lavori","Life","Mortgage","PayPal","Phone","Rent","Salary","School","Taxes","To refund","WOOLWORTHS")
     x <- categorise("AFG.csv")
-    report(x)
+    x <- categorise("Bankwest.csv", prev=x)
+    str(x)
+    #report(x)
 }
 
 
@@ -44,10 +46,10 @@ rename_category <- function(cat_old, cat_new){
     } else {
         cat("Something wrong happened")
     }
-    
+}    
 
 
-categorise <- function(filein){
+categorise <- function(filein, prev = NULL){
     x <- read.csv(filein)
     names(x) <- c("date", "description", "amount")
     x$kind=rep('?',nrow(x))
@@ -65,10 +67,10 @@ categorise <- function(filein){
             #advise to run new_category() to create list of categories.
         }
 	} else {
-	    #create Categories folder and advise to run new_category() to create list of categories.
-	        dir.create("Categories")
-	        cat("The folder 'Categories' is not present and it has been created for you. You should now run new_category() to create the categories files and their content.")
-	        return()
+        #create Categories folder and advise to run new_category() to create list of categories.
+        dir.create("Categories")
+        cat("The folder 'Categories' is not present and it has been created for you. You should now run new_category() to create the categories files and their content.")
+        return()
 	}
 	for (cat_name in categories){
 		cat_content = read.csv(paste("Categories/",cat_name,".csv",sep=''),header=F)[,1]
@@ -76,6 +78,11 @@ categorise <- function(filein){
             ii=grep(icat,x$description,ignore.case=TRUE)
             x$kind[ii]=cat_name
         }
+	}
+	if (!is.null(prev)){
+	    x <- rbind(prev$expenses, x)
+	    x <- x[order(x$date),]
+	    filein <- c(prev$filein, filein)
 	}
 	return(list(expenses=x, categories=categories, file=filein))
 }

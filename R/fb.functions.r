@@ -2,8 +2,7 @@ test <- function(){
     #categories = c("Alcohol","Bills","CafeRestaurant","Car","Cash","ChildCare","Credit Card","Food","Health","Holidays","Lavori","Life","Mortgage","PayPal","Phone","Rent","Salary","School","Taxes","To refund","WOOLWORTHS")
     x <- categorise("AFG.csv")
     x <- categorise("Bankwest.csv", prev=x)
-    str(x)
-    #report(x)
+    report(x)
 }
 
 
@@ -82,7 +81,7 @@ categorise <- function(filein, prev = NULL){
 	if (!is.null(prev)){
 	    x <- rbind(prev$expenses, x)
 	    x <- x[order(x$date),]
-	    filein <- c(prev$filein, filein)
+	    filein <- c(prev$file, filein)
 	}
 	return(list(expenses=x, categories=categories, file=filein))
 }
